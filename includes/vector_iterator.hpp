@@ -6,7 +6,7 @@
 /*   By: rchampli <rchampli@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 05:24:02 by rchampli          #+#    #+#             */
-/*   Updated: 2022/12/08 06:46:08 by rchampli         ###   ########.fr       */
+/*   Updated: 2022/12/08 06:49:28 by rchampli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,15 +168,18 @@ namespace ft {
 
 	template <typename T, typename Container>
 	ft::vector_iterator<T, Container> operator+(const ft::vector_iterator<T, Container> &lhs, typename ft::vector_iterator<T, Container>::difference_type rhs) {
-		 return (lhs.base() + rhs);}
+		 return (lhs.base() + rhs);
+	}
 
 	template <typename T, typename Container>
 	ft::vector_iterator<T, Container> operator+(typename ft::vector_iterator<T, Container>::difference_type lhs, const ft::vector_iterator<T, Container> &rhs) {
-		return (rhs.base() + lhs); }
+		return (rhs.base() + lhs);
+	}
 
 	template <typename T, typename Container>
 	ft::vector_iterator<T, Container> operator-(typename ft::vector_iterator<T, Container>::difference_type lhs, const ft::vector_iterator<T, Container> &rhs) {
-		return (rhs.base() - lhs); }
+		return (rhs.base() - lhs);
+	}
 
 	template <typename T, typename Container>
 	ft::vector_iterator<T, Container> operator-(typename vector_iterator<T, Container>::difference_type &lhs, const vector_iterator<T, Container> &rhs) {
