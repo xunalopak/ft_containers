@@ -6,15 +6,16 @@
 /*   By: rchampli <rchampli@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 23:35:39 by rchampli          #+#    #+#             */
-/*   Updated: 2022/12/08 05:23:12 by rchampli         ###   ########.fr       */
+/*   Updated: 2022/12/08 06:55:21 by rchampli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//TODO : create an iterator class for replace buffer_iterator< T >
+//TODO : create an iterator class for replace reverse_iterator< T > and const_reverse_iterator< T >
 #ifndef FT_CONTAINER_VECTOR_HPP
 # define FT_CONTAINER_VECTOR_HPP
 
 #include <iostream>
+#include "vector_iterator.hpp"
 
 namespace ft {
 	template < class T, class Alloc = std::allocator<T> > class vector {
@@ -22,13 +23,13 @@ namespace ft {
 		public:
 			//types
 			typedef T											value_type;
-			typedef Alloc										allocator type;
+			typedef Alloc										allocator_type;
 			typedef typename Alloc::reference					reference;
 			typedef typename Alloc::const_reference				const_reference;
 			typedef typename Alloc:pointer						pointer;
 			typedef typename Alloc::const_pointer				const_pointer;
-			typedef buffer_iterator< T >						iterator;
-			typedef buffer_iterator< T >						const_iterator;
+			typedef iterator_traits< T >						iterator;
+			typedef iterator_traits< T >						const_iterator;
 			typedef reverse_iterator<iterator>					reverse_iterator;
 			typedef const_reverse_iterator<const_iterator>		const_reverse_iterator;
 			typedef ptrdiff_t									difference_type;
