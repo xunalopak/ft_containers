@@ -6,7 +6,7 @@
 /*   By: rchampli <rchampli@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 23:35:39 by rchampli          #+#    #+#             */
-/*   Updated: 2022/12/08 06:56:17 by rchampli         ###   ########.fr       */
+/*   Updated: 2022/12/08 07:47:33 by rchampli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@ namespace ft {
 
 		public:
 			//variables
-			allocator_type	_allocator;
-			value_type		*_data;
-			size_type		_capacity;
-			size_type		_size;
+			allocator_type										_allocator;
+			value_type											*_data;
+			size_type											_capacity;
+			size_type											_size;
 
 		public:
 			//construct/copy/destruct
@@ -53,17 +53,22 @@ namespace ft {
 
 		public:
 			//public member functions
-			~vector() {};
+			~vector() {clear();}
 
 			iterator begin()
-			{ return iterator(_base.begin(), this); }
+			{ return iterator(_data); }
 			const_iterator begin() const
-			{ return const_iterator(_base.begin(), this); }
+			{ return const_iterator(_data); }
 
-			iterator end();
-			const_iterator end() const;
-			iterator rbegin(); const_iterator rbegin const;
-			reverse_iterator rend();const_reverse_iterator rend() const;
+			iterator end()
+			{ return iterator(_data + _size); }
+			const_iterator end() const
+			{ return const_iterator(_data + _size); }
+			iterator rbegin();
+			const_iterator rbegin const;
+			reverse_iterator rend();
+			const_reverse_iterator rend() const;
+			
 	};
 }
 
