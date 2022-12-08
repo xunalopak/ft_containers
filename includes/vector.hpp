@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rchampli <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rchampli <rchampli@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 23:35:39 by rchampli          #+#    #+#             */
-/*   Updated: 2022/12/08 02:40:00 by rchampli         ###   ########lyon.fr   */
+/*   Updated: 2022/12/08 05:23:12 by rchampli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //TODO : create an iterator class for replace buffer_iterator< T >
 #ifndef FT_CONTAINER_VECTOR_HPP
 # define FT_CONTAINER_VECTOR_HPP
+
+#include <iostream>
 
 namespace ft {
 	template < class T, class Alloc = std::allocator<T> > class vector {
@@ -57,12 +59,11 @@ namespace ft {
 			const_iterator begin() const
 			{ return const_iterator(_base.begin(), this); }
 
-			iterator end()
-			{ return iterator(_base)}
+			iterator end();
 			const_iterator end() const;
 			iterator rbegin(); const_iterator rbegin const;
 			reverse_iterator rend();const_reverse_iterator rend() const;
-	}
+	};
 }
 
 #endif
