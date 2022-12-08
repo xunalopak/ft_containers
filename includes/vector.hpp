@@ -6,7 +6,7 @@
 /*   By: rchampli <rchampli@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 23:35:39 by rchampli          #+#    #+#             */
-/*   Updated: 2022/12/08 06:55:21 by rchampli         ###   ########.fr       */
+/*   Updated: 2022/12/08 06:56:17 by rchampli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ namespace ft {
 			typedef Alloc										allocator_type;
 			typedef typename Alloc::reference					reference;
 			typedef typename Alloc::const_reference				const_reference;
-			typedef typename Alloc:pointer						pointer;
+			typedef typename Alloc::pointer						pointer;
 			typedef typename Alloc::const_pointer				const_pointer;
 			typedef iterator_traits< T >						iterator;
 			typedef iterator_traits< T >						const_iterator;
