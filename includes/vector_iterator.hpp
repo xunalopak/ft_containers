@@ -6,7 +6,7 @@
 /*   By: rchampli <rchampli@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 05:24:02 by rchampli          #+#    #+#             */
-/*   Updated: 2023/01/09 16:20:36 by rchampli         ###   ########.fr       */
+/*   Updated: 2023/01/09 16:27:15 by rchampli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,7 +279,12 @@ namespace ft {
 			}
 	};
 	
-	template <class T>
+	// This is a template class for a vector iterator
+// The class takes in a pointer to a vector and returns an iterator
+// The class can be used to iterate through the vector
+// It has overloaded operators for the * and []
+
+template <class T>
 	class ConstVectorIterator : public VectorIterator<T>
 	{
 		public:
@@ -321,14 +326,19 @@ namespace ft {
 			}
 	};
 
-	template <class T>
+	// This code is a const_reverse_iterator for a vector class.
+// The purpose of this iterator is to iterate through a vector in reverse order.
+// It is const because it does not allow you to modify the values in the vector.
+// This iterator is implemented by using the ReverseVectorIterator as a base class.
+
+template <class T>
 	class ConstReverseVectorIterator : public ReverseVectorIterator<T>
 	{
 		public:
 			typedef T value_type;
 			typedef T& reference;
 			typedef T* pointer;
-		
+			
 		public:
 			ConstReverseVectorIterator()
 			{}

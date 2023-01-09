@@ -6,7 +6,7 @@
 /*   By: rchampli <rchampli@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 23:35:39 by rchampli          #+#    #+#             */
-/*   Updated: 2022/12/21 17:25:12 by rchampli         ###   ########.fr       */
+/*   Updated: 2023/01/09 16:23:00 by rchampli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 
 #include <iostream>
 #include "vector_iterator.hpp"
-#include "reverse_iterator.hpp"
 
 namespace ft {
 	template < class T, class Alloc = std::allocator<T> > class vector {
