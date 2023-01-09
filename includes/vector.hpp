@@ -6,16 +6,18 @@
 /*   By: rchampli <rchampli@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 23:35:39 by rchampli          #+#    #+#             */
-/*   Updated: 2022/12/08 07:47:33 by rchampli         ###   ########.fr       */
+/*   Updated: 2022/12/21 17:25:12 by rchampli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //TODO : create an iterator class for replace reverse_iterator< T > and const_reverse_iterator< T >
-#ifndef FT_CONTAINER_VECTOR_HPP
-# define FT_CONTAINER_VECTOR_HPP
+//TODO : make erase and insert 
+
+#pragma once
 
 #include <iostream>
 #include "vector_iterator.hpp"
+#include "reverse_iterator.hpp"
 
 namespace ft {
 	template < class T, class Alloc = std::allocator<T> > class vector {
@@ -44,16 +46,33 @@ namespace ft {
 
 		public:
 			//construct/copy/destruct
-			explicit vector (const allocator_type& alloc = allocator_type());
-			explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
+			explicit vector(const allocator_type& alloc = allocator_type());
+			explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
 			template <class InputIterator>;
-			vector (const vector& x);
+			vector(const vector& x);
 			~vector();
-			vector& operator= (const vector& x);
+			vector& operator=(const vector& x);
 
 		public:
 			//public member functions
-			~vector() {clear();}
+			vector(const allocator_type& alloc = allocator_type()) : _allocator(alloc), _data(NULL), _capacity(0), _size(0) {}
+			
+			vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _allocator(alloc), _data(NULL), _capacity(0), _size(0)
+			{ assign(n, val); }
+			
+			// template <class Iter>
+			// vector(Iter first, Iter last, const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<Iter>::value>::type* = 0) : _allocator(alloc), _data(nullptr), _capacity(0), _size(0)
+			// { assign(first, last); }
+			
+			vector(const vector &cpy) : _allocator(NULL), _data(NULL), _capacity(0), _size(0)
+			{ *this = cpy; }
+			 
+			~vector()
+			{
+				for (size_type i = 0; i < _size; i++)
+					_allocator.destroy(_data + i);
+				_allocator.deallocate(_data, _capacity);
+			}
 
 			iterator begin()
 			{ return iterator(_data); }
@@ -64,12 +83,33 @@ namespace ft {
 			{ return iterator(_data + _size); }
 			const_iterator end() const
 			{ return const_iterator(_data + _size); }
-			iterator rbegin();
-			const_iterator rbegin const;
-			reverse_iterator rend();
-			const_reverse_iterator rend() const;
+			// iterator rbegin();
+			// const_iterator rbegin const;
+			// reverse_iterator rend();
+			// const_reverse_iterator rend() const;
+			
+			size_type size() const
+			{ return _size; }
+
+			size_type max_size() const
+			{ return _allocator.max_size(); }
+
+			size_type capacity() const
+			{ return _capacity; }
+
+			bool empty() const
+			{ return _size == 0; }
+			
+			void resize(size_type n, value_type val = value_type())
+			{
+				//if the new size is smaller than the old size, add n - _size new elements
+				if (n < _size)
+					insert(end(), n - _size, val);
+				//if the new size is larger than the old size, erase the elements from n to the end
+				else if (n > _size)
+					erase(begin() + n, end());
+			}
+			
 			
 	};
 }
-
-#endif
