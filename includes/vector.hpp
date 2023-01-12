@@ -6,7 +6,7 @@
 /*   By: rchampli <rchampli@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 23:35:39 by rchampli          #+#    #+#             */
-/*   Updated: 2023/01/12 05:17:12 by rchampli         ###   ########.fr       */
+/*   Updated: 2023/01/12 17:17:36 by rchampli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,6 +293,13 @@ namespace ft {
 				x = *this;
 				*this = tmp;
 			}
+
+			template <class T, class Alloc>
+			void swap (vector<T,Alloc>& x, vector<T,Alloc>& y)
+			{
+				x.swap(y);
+			}
+
 
 			size_type size() const
 			{
