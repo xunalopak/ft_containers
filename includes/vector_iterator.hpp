@@ -12,6 +12,8 @@
 
 #pragma once
 
+#include <iostream>
+
 namespace ft {
 
 	template <class T>
@@ -62,14 +64,14 @@ namespace ft {
 
 			VectorIterator &operator++(int)
 			{
-				VectorIterator tmp(*this);
-				operator++();
+				static VectorIterator tmp(*this);
+				tmp.operator++();
 				return tmp;
 			}
 			
 			VectorIterator &operator--(int)
 			{
-				VectorIterator tmp(*this);
+				static VectorIterator tmp(*this);
 				operator--();
 				return tmp;
 			}
@@ -119,12 +121,12 @@ namespace ft {
 				return VectorIterator(_ptr + n);
 			}
 
-			VectorIterator operator-(int n) const
-			{
+			VectorIterator operator-(int n) const {
 				return VectorIterator(_ptr - n);
 			}
-			
-			VectorIterator &operator-= (int n)
+
+
+			VectorIterator &operator-=(int n)
 			{
 				while (n-- > 0)
 					operator--();
@@ -133,7 +135,7 @@ namespace ft {
 				return *this;
 			}
 			
-			VectorIterator &operator+= (int n)
+			VectorIterator &operator+=(int n)
 			{
 				while (n++ < 0)
 					operator--();
@@ -313,11 +315,6 @@ template <class T>
 			{
 				this->_ptr = other._ptr;
 				return *this;
-			}
-			
-			ConstVectorIterator &operator*()
-			{
-				return *this->_ptr;
 			}
 			
 			ConstVectorIterator &operator[](int n) const
