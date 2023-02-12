@@ -15,358 +15,427 @@
 #include <iostream>
 
 namespace ft {
+    template <class Iter>
+    struct iterator_traits
+    {
+        typedef typename Iter::difference_type          difference_type;
+        typedef typename Iter::value_type               value_type;
+        typedef typename Iter::pointer                  pointer;
+        typedef typename Iter::reference                reference;
+        typedef typename Iter::iterator_category        iterator_category;
+    };
+    template <class T>
+    struct iterator_traits<T*>
+    {
+        typedef typename std::ptrdiff_t                        difference_type;
+        typedef  T                                    value_type;
+        typedef  T*                                    pointer;
+        typedef  T&                                    reference;
+        typedef typename std::random_access_iterator_tag    iterator_category;
+    };
+    template <class T>
+    struct iterator_traits<const T*>
+    {
+        typedef typename std::ptrdiff_t                        difference_type;
+        typedef  const T                            value_type;
+        typedef  const T*                            pointer;
+        typedef  const T&                            reference;
+        typedef typename std::random_access_iterator_tag    iterator_category;
+    };
 
-	template <class T>
-	class VectorIterator
-	{
-		public:
-			typedef T value_type;
-			typedef T& reference;
-			typedef T* pointer;
+    template <class T, class container>
+	class Iterator
+    {
+        protected:
+            T _ptr;
 
-		protected:
-			pointer _ptr;
+        public:
+            typedef typename iterator_traits<T>::difference_type difference_type;
+            typedef typename iterator_traits<T>::value_type value_type;
+            typedef typename iterator_traits<T>::pointer pointer;
+            typedef typename iterator_traits<T>::reference reference;
+            typedef typename iterator_traits<T>::iterator_category iterator_category;
 
-		public:
-			VectorIterator()
-			{}
-			
-			VectorIterator(const VectorIterator &other)
-			{
-				*this = other;
-			}
-			
-			VectorIterator(pointer ptr)
-			{
-				_ptr = ptr;
-			}
-			
-			~VectorIterator()
-			{}
+            Iterator() : _ptr(NULL) {}
+            Iterator(T ptr) : _ptr(ptr) {}
+            Iterator(const Iterator &src) : _ptr(src._ptr) {}
+            virtual ~Iterator() {}
 
-			VectorIterator &operator=(const VectorIterator &other)
-			{
-				_ptr = other._ptr;
-				return *this;
-			}
+            Iterator& operator=(const Iterator &src)
+            {
+                if (this != &src)
+                    _ptr = src._ptr;
+                return *this;
+            }
 
-			VectorIterator &operator++()
-			{
-				_ptr++;
-				return *this;
-			}
+            Iterator operator++(int)
+            {
+                return _ptr++;
+            }
 
-			VectorIterator &operator--()
-			{
-				_ptr--;
-				return *this;
-			}
+            Iterator operator++()
+            {
+                return _ptr++;
+            }
 
-			VectorIterator &operator++(int)
-			{
-				static VectorIterator tmp(*this);
-				tmp.operator++();
-				return tmp;
-			}
-			
-			VectorIterator &operator--(int)
-			{
-				static VectorIterator tmp(*this);
-				operator--();
-				return tmp;
-			}
+            Iterator operator--(int)
+            {
+                return _ptr--;
+            }
 
-			bool operator==(const VectorIterator &other) const
-			{
-				return (_ptr == other._ptr);
-			}
-			
-			bool operator!=(const VectorIterator &other) const
-			{
-				return (_ptr != other._ptr);
-			}
+            Iterator operator--()
+            {
+                return _ptr--;
+            }
 
-			bool operator>(const VectorIterator &other) const
-			{
-				return (_ptr > other._ptr);
-			}
+            bool operator==(const Iterator &rhs) const
+            {
+                return _ptr == rhs._ptr;
+            }
 
-			bool operator<(const VectorIterator &other) const
-			{
-				return (_ptr < other._ptr);
-			}
+            bool operator!=(const Iterator &rhs) const
+            {
+                return _ptr != rhs._ptr;
+            }
 
-			bool operator>=(const VectorIterator &other) const
-			{
-				return (_ptr >= other._ptr);
-			}
+            bool operator<(const Iterator &rhs) const
+            {
+                return _ptr < rhs._ptr;
+            }
 
-			bool operator<=(const VectorIterator &other) const
-			{
-				return (_ptr <= other._ptr);
-			}
+            bool operator<=(const Iterator &rhs) const
+            {
+                return _ptr <= rhs._ptr;
+            }
 
-			value_type &operator*() const
-			{
-				return *_ptr;
-			}
+            bool operator>(const Iterator &rhs) const
+            {
+                return _ptr > rhs._ptr;
+            }
 
-			value_type *operator->() const
-			{
-				return _ptr;
-			}
+            bool operator>=(const Iterator &rhs) const
+            {
+                return _ptr >= rhs._ptr;
+            }
 
-			VectorIterator operator+(int n) const
-			{
-				return VectorIterator(_ptr + n);
-			}
+            reference operator*() const
+            {
+                return *_ptr;
+            }
 
-			VectorIterator operator-(int n) const {
-				return VectorIterator(_ptr - n);
-			}
+            pointer operator->() const
+            {
+                return _ptr;
+            }
 
+            Iterator operator+(difference_type n)
+            {
+                return _ptr + n;
+            }
 
-			VectorIterator &operator-=(int n)
-			{
-				while (n-- > 0)
-					operator--();
-				while (n++ < 0)
-					operator++();
-				return *this;
-			}
-			
-			VectorIterator &operator+=(int n)
-			{
-				while (n++ < 0)
-					operator--();
-				while (n-- > 0)
-					operator++();
-				return *this;
-			}
+            Iterator operator-(difference_type n)
+            {
+                return _ptr - n;
+            }
 
-			value_type &operator[](int n) const
-			{
-				return _ptr[n];
-			}
-	};
+            Iterator operator+=(difference_type n)
+            {
+                return _ptr += n;
+            }
 
-	template <class T>
-	class ReverseVectorIterator : public VectorIterator<T>
-	{
-		public:
-			typedef T value_type;
-			typedef T& reference;
-			typedef T* pointer;
-		
-		public:
-			ReverseVectorIterator()
-			{}
-			
-			ReverseVectorIterator(const ReverseVectorIterator &other)
-			{
-				*this = other;
-			}
-			
-			ReverseVectorIterator(pointer ptr)
-			{
-				this->_ptr = ptr;
-			}
+            Iterator operator-=(difference_type n)
+            {
+                return _ptr -= n;
+            }
 
-			~ReverseVectorIterator()
-			{}
+            reference operator[](difference_type n)
+            {
+                return _ptr[n];
+            }
+    };
 
-			ReverseVectorIterator &operator=(const ReverseVectorIterator &other)
-			{
-				this->_ptr = other._ptr;
-				return *this;
-			}
+    template <class T>
+    class ConstIterator {
+    protected:
+        T _ptr;
 
-			ReverseVectorIterator &operator++()
-			{
-				this->_ptr--;
-				return *this;
-			}
+    public:
+        typedef typename iterator_traits<T>::difference_type difference_type;
+        typedef typename iterator_traits<T>::value_type value_type;
+        typedef typename iterator_traits<T>::pointer pointer;
+        typedef typename iterator_traits<T>::reference reference;
+        typedef typename iterator_traits<T>::iterator_category iterator_category;
 
-			ReverseVectorIterator &operator--()
-			{
-				this->_ptr++;
-				return *this;
-			}
+        ConstIterator() : _ptr(NULL) {}
 
-			ReverseVectorIterator operator++(int)
-			{
-				ReverseVectorIterator tmp(*this);
-				operator++();
-				return tmp;
-			}
-			
-			ReverseVectorIterator operator--(int)
-			{
-				ReverseVectorIterator tmp(*this);
-				operator--();
-				return tmp;
-			}
+        ConstIterator(T ptr) : _ptr(ptr) {}
 
-			ReverseVectorIterator operator+=(int n)
-			{
-				while (n-- > 0)
-					operator++();
-				while (n++ < 0)
-					operator--();
-				return *this;
-			}
+        ConstIterator(const ConstIterator &src) : _ptr(src._ptr) {}
 
-			ReverseVectorIterator operator-=(int n)
-			{
-				while (n++ < 0)
-					operator++();
-				while (n-- > 0)
-					operator--();
-				return *this;
-			}
+        virtual ~ConstIterator() {}
 
-			bool operator==(const ReverseVectorIterator &other) const
-			{
-				return (this->_ptr == other._ptr);
-			}
-			
-			bool operator!=(const ReverseVectorIterator &other) const
-			{
-				return (this->_ptr != other._ptr);
-			}
-			
-			bool operator>(const ReverseVectorIterator &other) const
-			{
-				return (this->_ptr > other._ptr);
-			}
-			
-			bool operator>=(const ReverseVectorIterator &other) const
-			{
-				return (this->_ptr >= other._ptr);
-			}
-			
-			bool operator<(const ReverseVectorIterator &other) const
-			{
-				return (this->_ptr < other._ptr);
-			}
-			
-			bool operator<=(const ReverseVectorIterator &other) const
-			{
-				return (this->_ptr <= other._ptr);
-			}
-			
-			value_type &operator*() const
-			{
-				return *(this->_ptr);
-			}
+        ConstIterator &operator=(const ConstIterator &src) {
+            if (this != &src)
+                _ptr = src._ptr;
+            return *this;
+        }
 
-			value_type *operator->() const
-			{
-				return this->_ptr;
-			}
-			
-			ReverseVectorIterator operator+(int n) const
-			{
-				return ReverseVectorIterator(this->_ptr - n);
-			}
-			
-			ReverseVectorIterator operator-(int n) const
-			{
-				return ReverseVectorIterator(this->_ptr + n);
-			}
-			
-			value_type &operator[](int n) const
-			{
-				return this->_ptr[-n];
-			}
-	};
-	
-	// This is a template class for a vector iterator
-// The class takes in a pointer to a vector and returns an iterator
-// The class can be used to iterate through the vector
-// It has overloaded operators for the * and []
+        ConstIterator operator++(int) {
+            return _ptr++;
+        }
 
-template <class T>
-	class ConstVectorIterator : public VectorIterator<T>
-	{
-		public:
-			typedef T value_type;
-			typedef T& reference;
-			typedef T* pointer;
-		
-		public:
-			ConstVectorIterator()
-			{}
+        ConstIterator operator++() {
+            return _ptr++;
+        }
 
-			ConstVectorIterator(const ConstVectorIterator &other)
-			{
-				*this = other;
-			}
-			
-			ConstVectorIterator(pointer ptr)
-			{
-				this->_ptr = ptr;
-			}
+        ConstIterator operator--(int) {
+            return _ptr--;
+        }
 
-			~ConstVectorIterator()
-			{}
+        ConstIterator operator--() {
+            return _ptr--;
+        }
 
-			ConstVectorIterator &operator=(const ConstVectorIterator &other)
-			{
-				this->_ptr = other._ptr;
-				return *this;
-			}
-			
-			ConstVectorIterator &operator[](int n) const
-			{
-				return this->_ptr[n];
-			}
-	};
+        bool operator==(const ConstIterator &rhs) const {
+            return _ptr == rhs._ptr;
+        }
 
-	// This code is a const_reverse_iterator for a vector class.
-// The purpose of this iterator is to iterate through a vector in reverse order.
-// It is const because it does not allow you to modify the values in the vector.
-// This iterator is implemented by using the ReverseVectorIterator as a base class.
+        bool operator!=(const ConstIterator &rhs) const {
+            return _ptr != rhs._ptr;
+        }
 
-template <class T>
-	class ConstReverseVectorIterator : public ReverseVectorIterator<T>
-	{
-		public:
-			typedef T value_type;
-			typedef T& reference;
-			typedef T* pointer;
-			
-		public:
-			ConstReverseVectorIterator()
-			{}
+        bool operator<(const ConstIterator &rhs) const {
+            return _ptr < rhs._ptr;
+        }
 
-			ConstReverseVectorIterator(const ConstReverseVectorIterator &other)
-			{
-				*this = other;
-			}
-			
-			ConstReverseVectorIterator(pointer ptr)
-			{
-				this->_ptr = ptr;
-			}
+        bool operator<=(const ConstIterator &rhs) const {
+            return _ptr <= rhs._ptr;
+        }
 
-			~ConstReverseVectorIterator()
-			{}
+        bool operator>(const ConstIterator &rhs) const {
+            return _ptr > rhs._ptr;
+        }
 
-			ConstReverseVectorIterator &operator=(const ConstReverseVectorIterator &other)
-			{
-				this->_ptr = other._ptr;
-				return *this;
-			}
-			
-			ConstReverseVectorIterator &operator*()
-			{
-				return *this->_ptr;
-			}
-			
-			ConstReverseVectorIterator &operator[](int n) const
-			{
-				return this->_ptr[-n];
-			}
-	};
+        bool operator>=(const ConstIterator &rhs) const {
+            return _ptr >= rhs._ptr;
+        }
+
+        reference operator*() const {
+            return *_ptr;
+        }
+
+        pointer operator->() const {
+            return _ptr;
+        }
+
+        ConstIterator operator+(difference_type n) {
+            return _ptr + n;
+        }
+
+        ConstIterator operator-(difference_type n) {
+            return _ptr - n;
+        }
+
+        ConstIterator operator+=(difference_type n) {
+            return _ptr += n;
+        }
+
+        ConstIterator operator-=(difference_type n) {
+            return _ptr -= n;
+        }
+
+        reference operator[](difference_type n) {
+            return _ptr[n];
+        }
+    };
+
+    template <class T>
+    class ReverseIterator {
+    protected:
+        T _ptr;
+
+    public:
+        typedef typename iterator_traits<T>::difference_type difference_type;
+        typedef typename iterator_traits<T>::value_type value_type;
+        typedef typename iterator_traits<T>::pointer pointer;
+        typedef typename iterator_traits<T>::reference reference;
+        typedef typename iterator_traits<T>::iterator_category iterator_category;
+
+        ReverseIterator() : _ptr(NULL) {}
+
+        ReverseIterator(T ptr) : _ptr(ptr) {}
+
+        ReverseIterator(const ReverseIterator &src) : _ptr(src._ptr) {}
+
+        virtual ~ReverseIterator() {}
+
+        ReverseIterator &operator=(const ReverseIterator &src) {
+            if (this != &src)
+                _ptr = src._ptr;
+            return *this;
+        }
+
+        ReverseIterator operator++(int) {
+            return _ptr--;
+        }
+
+        ReverseIterator operator++() {
+            return _ptr--;
+        }
+
+        ReverseIterator operator--(int) {
+            return _ptr++;
+        }
+
+        ReverseIterator operator--() {
+            return _ptr++;
+        }
+
+        bool operator==(const ReverseIterator &rhs) const {
+            return _ptr == rhs._ptr;
+        }
+
+        bool operator!=(const ReverseIterator &rhs) const {
+            return _ptr != rhs._ptr;
+        }
+
+        bool operator<(const ReverseIterator &rhs) const {
+            return _ptr < rhs._ptr;
+        }
+
+        bool operator<=(const ReverseIterator &rhs) const {
+            return _ptr <= rhs._ptr;
+        }
+
+        bool operator>(const ReverseIterator &rhs) const {
+            return _ptr > rhs._ptr;
+        }
+
+        bool operator>=(const ReverseIterator &rhs) const {
+            return _ptr >= rhs._ptr;
+        }
+
+        reference operator*() const {
+            return *_ptr;
+        }
+
+        pointer operator->() const {
+            return _ptr;
+        }
+
+        ReverseIterator &operator+(difference_type n) {
+            return _ptr - n;
+        }
+
+        ReverseIterator &operator-(difference_type n) {
+            return _ptr + n;
+        }
+
+        ReverseIterator &operator+=(difference_type n) {
+            return _ptr -= n;
+        }
+
+        ReverseIterator &operator-=(difference_type n) {
+            return _ptr += n;
+        }
+
+        reference operator[](difference_type n) {
+            return _ptr[-n];
+        }
+    };
+
+    template <class T>
+    class ConstReverseIterator {
+    protected:
+        T _ptr;
+
+    public:
+        typedef typename iterator_traits<T>::difference_type difference_type;
+        typedef typename iterator_traits<T>::value_type value_type;
+        typedef typename iterator_traits<T>::pointer pointer;
+        typedef typename iterator_traits<T>::reference reference;
+        typedef typename iterator_traits<T>::iterator_category iterator_category;
+
+        ConstReverseIterator() : _ptr(NULL) {}
+
+        ConstReverseIterator(T ptr) : _ptr(ptr) {}
+
+        ConstReverseIterator(const ConstReverseIterator &src) : _ptr(src._ptr) {}
+
+        virtual ~ConstReverseIterator() {}
+
+        ConstReverseIterator &operator=(const ConstReverseIterator &src) {
+            if (this != &src)
+                _ptr = src._ptr;
+            return *this;
+        }
+
+        ConstReverseIterator operator++(int) {
+            return _ptr--;
+        }
+
+        ConstReverseIterator operator++() {
+            return _ptr--;
+        }
+
+        ConstReverseIterator operator--(int) {
+            return _ptr++;
+        }
+
+        ConstReverseIterator operator--() {
+            return _ptr++;
+        }
+
+        bool operator==(const ConstReverseIterator &rhs) const {
+            return _ptr == rhs._ptr;
+        }
+
+        bool operator!=(const ConstReverseIterator &rhs) const {
+            return _ptr != rhs._ptr;
+        }
+
+        bool operator<(const ConstReverseIterator &rhs) const {
+            return _ptr < rhs._ptr;
+        }
+
+        bool operator<=(const ConstReverseIterator &rhs) const {
+            return _ptr <= rhs._ptr;
+        }
+
+        bool operator>(const ConstReverseIterator &rhs) const {
+            return _ptr > rhs._ptr;
+        }
+
+        bool operator>=(const ConstReverseIterator &rhs) const {
+            return _ptr >= rhs._ptr;
+        }
+
+        reference operator*() const {
+            return *_ptr;
+        }
+
+        pointer operator->() const {
+            return _ptr;
+        }
+
+        ConstReverseIterator &operator+(difference_type n) {
+            return _ptr - n;
+        }
+
+        ConstReverseIterator &operator-(difference_type n) {
+            return _ptr + n;
+        }
+
+        ConstReverseIterator &operator+=(difference_type n) {
+            return _ptr -= n;
+        }
+
+        ConstReverseIterator &operator-=(difference_type n) {
+            return _ptr += n;
+        }
+
+        reference operator[](difference_type n) {
+            return _ptr[-n];
+        }
+    };
 }
